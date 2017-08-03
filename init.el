@@ -72,6 +72,9 @@
 (setq recentf-max-menu-items 25)
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
+;; no tabs
+(setq indent-tabs-mode nil)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PACKAGES
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -97,6 +100,10 @@
 (custom-set-variables '(haskell-stylish-on-save t))
 (load-file "~/.emacs.d/intero-whitelist.el")
 (add-hook 'haskell-mode-hook 'intero-mode-whitelist)
+
+;; C++ mode
+(setq c-basic-offset 2)
+(setq-default c-electric-flag nil)
 
 ;; Autocompletion
 (add-hook 'after-init-hook 'global-company-mode)
