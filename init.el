@@ -4,6 +4,8 @@
 ;; Note: describe-key commando gebruiken om te zien welke functie aan een
 ;; kb gebonden is
 
+(setq evil-want-C-u-scroll t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LOAD PATHS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -15,7 +17,6 @@
   'package-archives
   '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
-(package-refresh-contents)
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -23,11 +24,18 @@
 (setq use-package-ensure-all t)
 (require 'use-package)
 
-(setq evil-want-C-u-scroll t)
+(use-package undo-tree
+  :config
+  (global-undo-tree-mode))
 
-(use-package undo-tree)
 (use-package company)
-(use-package linum-relative)
+
+(use-package linum-relative
+  :config
+  (setq linum-relative-current-symbol "")
+  (linum-mode)
+  (linum-relative-global-mode))
+
 (use-package smooth-scrolling)
 (use-package evil-leader)
 (use-package evil-surround)
@@ -35,14 +43,26 @@
   :config
   (global-evil-leader-mode)
   (global-evil-surround-mode 1)
-  (evil-mode 1)
-  )
+  (evil-mode 1))
 (use-package goto-chg)
+(use-package haskell-mode
+  :config
+  (setq exec-path (append exec-path '("~/.local/bin")))
+  (load-file "~/.emacs.d/intero-whitelist.el")
+  (add-hook 'haskell-mode-hook 'intero-mode-whitelist)
+  (setq haskell-stylish-on-save t))
+
 (use-package intero)
+
 ; (use-package auctex)
 ; (use-package company-auctex)
 (use-package magit)
-(use-package evil-magit)
+(use-package evil-magit
+  :init
+  ; optional: this is the evil state that evil-magit will use
+  (setq evil-magit-state 'normal)
+  ; optional: disable additional bindings for yanking text
+  (setq evil-magit-use-y-for-yank nil))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; GENERAL CONFIGURATION
@@ -52,6 +72,7 @@
 (setq inhibit-startup-screen t)
 (tool-bar-mode -1)
 (blink-cursor-mode 0)
+(column-number-mode t)
 
 ;; Word wrapping
 (global-visual-line-mode t)
@@ -79,7 +100,7 @@
 (smooth-scrolling-mode 1)
 
 ;; Inconsolata font
-(set-face-attribute 'default nil :family "Inconsolata" :height 140)
+(set-face-attribute 'default nil :family "Inconsolata" :height 130)
 
 ;; adwaita theme
 (load-theme 'adwaita t)
@@ -95,20 +116,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PACKAGES
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Undo tree
-(global-undo-tree-mode)
-
-
-;; Relative line numbers
-(setq linum-relative-current-symbol "")
-(linum-mode)
-(linum-relative-global-mode)
-
-;; Haskell mode
-(setq exec-path (append exec-path '("~/.local/bin")))
-(load-file "~/.emacs.d/intero-whitelist.el")
-(add-hook 'haskell-mode-hook 'intero-mode-whitelist)
-(setq haskell-stylish-on-save t)
 
 ;; C++ mode
 (setq c-basic-offset 2)
@@ -127,10 +134,6 @@
 (company-auctex-init)
 
 ;; git integration
-; optional: this is the evil state that evil-magit will use
-; (setq evil-magit-state 'normal)
-; optional: disable additional bindings for yanking text
-; (setq evil-magit-use-y-for-yank nil)
 (require 'evil-magit)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -156,3 +159,11 @@
 ;  '(package-selected-packages
 ;    (quote
 ;     (magit auctex goto-chg evil company undo-tree smooth-scrolling linum-relative intero evil-surround evil-magit evil-leader company-auctex))))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (helm use-package smooth-scrolling linum-relative intero evil-surround evil-magit evil-leader company-auctex))))

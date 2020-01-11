@@ -19,6 +19,14 @@
   (interactive "")
   (find-file (concat user-emacs-directory "intero-whitelist.el")))
 
+(defun duckduckgo ()
+  (interactive "")
+  (eww "duckduckgo.com"))
+
+(defun google ()
+  (interactive "")
+  (eww "google.com"))
+
 ;; General keybindings
 (evil-leader/set-leader "<SPC>")
 (evil-leader/set-key
@@ -34,7 +42,7 @@
   "fr" 'recentf-open-files
   "fi" 'find-init-file
   "fk" 'find-keybindings-file
-  "fi" 'find-intero-whitelist-file
+  "fw" 'find-intero-whitelist-file
   "fl" 'load-file
   
   ; buffers
@@ -56,10 +64,19 @@
   "ww" 'other-window
   "w1" 'delete-other-windows
 
+  ; Web
+  "Wu" 'eww
+  "Wd" 'duckduckgo
+  "Wg" 'google
+
   ; frames
   "Fn" 'make-frame-command
   "Fd" 'delete-frame
   "FF" 'other-frame
+
+  ; region
+  "ri" 'indent-region
+  "ra" 'align-regexp
   )
 
 ;; Flycheck keybindings
@@ -76,6 +93,17 @@
   "mt" 'intero-type-at
   "mi" 'intero-info
   "ml" 'intero-repl-load
+  )
+
+;; eww keybindings
+(evil-leader/set-key-for-mode 'eww-mode
+  "mq" 'eww-quit
+  "mr" 'eww-reload
+  "my" 'eww-copy-page-url
+  "mR" 'eww-readable
+  "md" 'eww-download
+  "mh" 'eww-back-url
+  "ml" 'eww-forward-url
   )
 
 ;; git keybindings
