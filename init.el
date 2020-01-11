@@ -48,9 +48,16 @@
 (use-package haskell-mode
   :config
   (setq exec-path (append exec-path '("~/.local/bin")))
+
+  ; explicitly say which files use intero
   (load-file "~/.emacs.d/intero-whitelist.el")
   (add-hook 'haskell-mode-hook 'intero-mode-whitelist)
-  (setq haskell-stylish-on-save t))
+
+  ; auto-format
+  (setq haskell-stylish-on-save f)
+
+  ; auto-insert module templates
+  (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template))
 
 (use-package intero)
 

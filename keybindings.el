@@ -68,6 +68,8 @@
   "Wu" 'eww
   "Wd" 'duckduckgo
   "Wg" 'google
+  "Wp" 'eww-back-url
+  "Wn" 'eww-forward-url
 
   ; frames
   "Fn" 'make-frame-command
