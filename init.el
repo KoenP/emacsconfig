@@ -23,10 +23,12 @@
   (package-install 'use-package))
 (setq use-package-ensure-all t)
 (require 'use-package)
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
 
-(use-package undo-tree
-  :config
-  (global-undo-tree-mode))
+ (use-package undo-tree
+   :config
+   (global-undo-tree-mode))
 
 (use-package company)
 
@@ -48,8 +50,8 @@
 (use-package haskell-mode
   :config
   (setq exec-path (append exec-path '("~/.local/bin")))
-  (load-file "~/.emacs.d/intero-whitelist.el")
-  (add-hook 'haskell-mode-hook 'intero-mode-whitelist)
+  ; (load-file "~/.emacs.d/intero-whitelist.el")
+  ; (add-hook 'haskell-mode-hook 'intero-mode-whitelist)
   (setq haskell-stylish-on-save t))
 
 (use-package intero)
@@ -126,12 +128,12 @@
 
 ;; Latex
 ;(load "auctex.el" nil t t)
-(setq TeX-auto-save t)
-(setq TeX-parse-self t)
-(setq TeX-save-query nil)
-(setq TeX-PDF-mode t)
-(add-hook 'LaTeX-mode-hook #'outline-minor-mode)
-(company-auctex-init)
+; (setq TeX-auto-save t)
+; (setq TeX-parse-self t)
+; (setq TeX-save-query nil)
+; (setq TeX-PDF-mode t)
+; (add-hook 'LaTeX-mode-hook #'outline-minor-mode)
+; (company-auctex-init)
 
 ;; git integration
 (require 'evil-magit)
