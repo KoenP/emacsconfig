@@ -1,6 +1,8 @@
 ;; info-display-manual
 ;;   -> Om een handleiding te verkennen
 
+;; Note: describe-key commando gebruiken om te zien welke functie aan een
+;; kb gebonden is
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LOAD PATHS
@@ -9,34 +11,46 @@
 ;  (normal-top-level-add-subdirs-to-load-path))
 
 (require 'package)
-(add-to-list
+ (add-to-list
   'package-archives
   '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
 (package-refresh-contents)
 
-(package-install 'undo-tree)
-(package-install 'company)
-(package-install 'linum-relative)
-(package-install 'smooth-scrolling)
-(package-install 'evil-leader)
-(package-install 'evil-surround)
-(package-install 'evil)
-(package-install 'goto-chg)
-(package-install 'intero)
-(package-install 'auctex)
-(package-install 'company-auctex)
-(package-install 'magit)
-(package-install 'evil-magit)
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+(setq use-package-ensure-all t)
+(require 'use-package)
+
+(setq evil-want-C-u-scroll t)
+
+(use-package undo-tree)
+(use-package company)
+(use-package linum-relative)
+(use-package smooth-scrolling)
+(use-package evil-leader)
+(use-package evil-surround)
+(use-package evil
+  :config
+  (global-evil-leader-mode)
+  (global-evil-surround-mode 1)
+  (evil-mode 1)
+  )
+(use-package goto-chg)
+(use-package intero)
+; (use-package auctex)
+; (use-package company-auctex)
+(use-package magit)
+(use-package evil-magit)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; GENERAL CONFIGURATION
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Disable tool bar
+;; Turning off some annoying defaults
+(setq ring-bell-function 'ignore)
+(setq inhibit-startup-screen t)
 (tool-bar-mode -1)
-
-;; No cursor blink
 (blink-cursor-mode 0)
 
 ;; Word wrapping
@@ -55,10 +69,14 @@
 ;(set-face-bold 'show-paren-match :weight)
 (setq show-paren-delay 0)
 
-;; scroll one line at a time (less "jumpy" than defaults)
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+;; Auto paired parens
+(electric-pair-mode)
+
+;; Less jumpy scrolling
+(setq mouse-wheel-scroll-amount '(2 ((shift) . 2))) ;; two lines at a time
 (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+(smooth-scrolling-mode 1)
 
 ;; Inconsolata font
 (set-face-attribute 'default nil :family "Inconsolata" :height 140)
@@ -70,7 +88,6 @@
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
-(global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
 ;; no tabs
 (setq indent-tabs-mode nil)
@@ -81,14 +98,6 @@
 ;; Undo tree
 (global-undo-tree-mode)
 
-;; Vim key bindings
-(setq evil-want-C-u-scroll t)
-(global-evil-leader-mode)
-(global-evil-surround-mode 1)
-(evil-mode 1)
-
-;; Smooth scrolling
-(smooth-scrolling-mode 1)
 
 ;; Relative line numbers
 (setq linum-relative-current-symbol "")
@@ -97,9 +106,9 @@
 
 ;; Haskell mode
 (setq exec-path (append exec-path '("~/.local/bin")))
-(custom-set-variables '(haskell-stylish-on-save t))
 (load-file "~/.emacs.d/intero-whitelist.el")
 (add-hook 'haskell-mode-hook 'intero-mode-whitelist)
+(setq haskell-stylish-on-save t)
 
 ;; C++ mode
 (setq c-basic-offset 2)
@@ -109,7 +118,7 @@
 (add-hook 'after-init-hook 'global-company-mode)
 
 ;; Latex
-(load "auctex.el" nil t t)
+;(load "auctex.el" nil t t)
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
 (setq TeX-save-query nil)
@@ -127,4 +136,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LOAD KEYBINDINGS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-file "~/.emacs.d/emacsconfig/keybindings.el")
+(load-file "~/.emacs.d/keybindings.el")
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Custom
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; (custom-set-variables
+;  ;; custom-set-variables was added by Custom.
+;  ;; If you edit it by hand, you could mess it up, so be careful.
+;  ;; Your init file should contain only one such instance.
+;  ;; If there is more than one, they won't work right.
+;  '(haskell-stylish-on-save t)
+;  '(package-selected-packages
+;    (quote
+;     (magit auctex goto-chg evil company undo-tree smooth-scrolling linum-relative intero evil-surround evil-magit evil-leader company-auctex))))
