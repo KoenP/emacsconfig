@@ -6,6 +6,14 @@
 ;; evil surround
 (define-key evil-visual-state-map "s" 'evil-surround-region)
 
+;; Indent region
+(define-key evil-visual-state-map "<tab>" 'indent-region)
+(define-key evil-visual-state-map "<TAB>" 'indent-region)
+
+;; Left shift
+(define-key evil-visual-state-map "<" 'evil-shift-left)
+
+
 ;; Interactive function definitions
 (defun find-init-file ()
   (interactive "")
@@ -97,6 +105,10 @@
   "ml" 'intero-repl-load
   )
 
+;; LaTeX keybindings
+(evil-leader/set-key-for-mode 'latex-mode
+  "me" 'tex-latex-block)
+
 ;; eww keybindings
 (evil-leader/set-key-for-mode 'eww-mode
   "mq" 'eww-quit
@@ -107,6 +119,11 @@
   "mh" 'eww-back-url
   "ml" 'eww-forward-url
   )
+
+;; dired keybindings
+(evil-leader/set-key-for-mode 'dired-mode
+  "<RET>" 'dired-find-alternate-file
+  "<return>" 'dired-find-alternate-file)
 
 ;; git keybindings
 (evil-leader/set-key
@@ -120,3 +137,9 @@
   "os" 'show-subtree
   "od" 'hide-subtree
   )
+
+;; Autocomplete keybindings\
+(with-eval-after-load 'company
+  (define-key company-active-map (kbd "<return>") nil)
+  (define-key company-active-map (kbd "RET") nil)
+  (define-key company-active-map (kbd "C-SPC" ) 'company-complete-selection))

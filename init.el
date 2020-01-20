@@ -12,6 +12,7 @@
 ;(let ((default-directory  "~/.emacs.d/lisp/"))
 ;  (normal-top-level-add-subdirs-to-load-path))
 
+
 (require 'package)
  (add-to-list
   'package-archives
@@ -26,9 +27,13 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
- (use-package undo-tree
+(use-package undo-tree
    :config
    (global-undo-tree-mode))
+
+(use-package which-key
+  :config
+  (which-key-mode))
 
 (use-package company)
 
@@ -104,13 +109,29 @@
 ;; adwaita theme
 (load-theme 'adwaita t)
 
-;; recent files
+;; Recent files
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
 
-;; no tabs
+;; No tabs
 (setq indent-tabs-mode nil)
+
+;; Maximize frame
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;; Autofill
+(setq current-fill-column 80)
+(auto-fill-mode t)
+
+;; Advice to skip buffers
+(defadvice next-buffer (after avoid-messages-buffer-in-next-buffer)
+  "Advice around `next-buffer' to avoid going into the *Messages* buffer."
+  (when (string= "*Messages*" (buffer-name))
+    (next-buffer)))
+
+;; When selecting a file in Dired, re-use the Dired buffer to display the file.
+(put 'dired-find-alternate-file 'disabled nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PACKAGES
@@ -139,6 +160,9 @@
 ;; LOAD KEYBINDINGS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (load-file "~/.emacs.d/keybindings.el")
+
+
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
