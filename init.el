@@ -66,6 +66,24 @@
   ; optional: disable additional bindings for yanking text
   (setq evil-magit-use-y-for-yank nil))
 
+(use-package dante
+  :after haskell-mode
+  :commands 'dante-mode
+  :init
+  (add-hook 'haskell-mode-hook 'flycheck-mode)
+  (add-hook 'haskell-mode-hook 'dante-mode)
+  :config
+  (setq flymake-no-changes-timeout nil)
+  (setq flymake-start-syntax-check-on-newline nil)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled)))
+
+
+;(use-package lsp-haskell
+;  :init
+;  (require 'lsp)
+;  :config
+;  (add-hook 'haskell-mode-hook #'lsp))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; GENERAL CONFIGURATION
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -168,4 +186,4 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (helm use-package smooth-scrolling linum-relative intero evil-surround evil-magit evil-leader company-auctex))))
+    (dante lsp-haskell helm use-package smooth-scrolling linum-relative intero evil-surround evil-magit evil-leader company-auctex))))

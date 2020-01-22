@@ -64,6 +64,11 @@
   "ww" 'other-window
   "w1" 'delete-other-windows
 
+  ;; error navigation
+  "el" 'flycheck-list-errors
+  "en" 'flycheck-next-error
+  "ep" 'flycheck-previous-error
+
   ; Web
   "Wu" 'eww
   "Wd" 'duckduckgo
@@ -77,23 +82,20 @@
   ; region
   "ri" 'indent-region
   "ra" 'align-regexp
+
+  ; xref (goto)
+  "gd" 'xref-find-definitions
+  "gD" 'xref-find-definitions-other-window
+  "gr" 'xref-find-references
   )
 
-;; Flycheck keybindings
-(evil-leader/set-key-for-mode 'flycheck-mode
-  "el" 'flycheck-list-errors
-  "en" 'flycheck-next-error
-  "ep" 'flycheck-previous-error
-  )
 
 ;; Haskell keybindings
 (evil-leader/set-key-for-mode 'haskell-mode
   "m0" 'haskell-navigate-imports
-  "mg" 'intero-goto-definition
-  "mt" 'intero-type-at
-  "mi" 'intero-info
-  "ml" 'intero-repl-load
-  )
+  "mt" 'dante-type-at
+  "mi" 'dante-info
+  "me" 'dante-eval-block)
 
 ;; eww keybindings
 (evil-leader/set-key-for-mode 'eww-mode
@@ -105,6 +107,7 @@
   "mh" 'eww-back-url
   "ml" 'eww-forward-url
   )
+
 
 ;; git keybindings
 (evil-leader/set-key
