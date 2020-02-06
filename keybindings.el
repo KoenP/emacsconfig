@@ -7,8 +7,9 @@
 (define-key evil-visual-state-map "s" 'evil-surround-region)
 
 ;; Indent region
-(define-key evil-visual-state-map "<tab>" 'indent-region)
-(define-key evil-visual-state-map "<TAB>" 'indent-region)
+; TODO this doesn't work
+; (define-key evil-visual-state-map "<tab>" 'indent-region)
+; (define-key evil-visual-state-map "<TAB>" 'indent-region)
 
 ;; Left shift
 (define-key evil-visual-state-map "<" 'evil-shift-left)
@@ -48,6 +49,7 @@
 
   ; files
   "fr" 'recentf-open-files
+  "fR" 'rename-file-and-buffer 
   "fi" 'find-init-file
   "fk" 'find-keybindings-file
   "fw" 'find-intero-whitelist-file
@@ -144,4 +146,6 @@
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "<return>") nil)
   (define-key company-active-map (kbd "RET") nil)
-  (define-key company-active-map (kbd "C-SPC" ) 'company-complete-selection))
+  (define-key company-active-map (kbd "C-SPC") 'company-complete-selection)
+  (define-key company-active-map (kbd "C-j") 'evil-complete-next)
+  (define-key company-active-map (kbd "C-k") 'evil-complete-previous))
