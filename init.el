@@ -14,10 +14,11 @@
 
 
 (require 'package)
+(package-initialize)
  (add-to-list
   'package-archives
   '("melpa" . "http://melpa.org/packages/") t)
-(package-initialize)
+(package-refresh-contents)
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -52,11 +53,11 @@
   (global-evil-surround-mode 1)
   (evil-mode 1))
 (use-package goto-chg)
-(use-package haskell-mode
-  :config
-  (setq exec-path (append exec-path '("~/.local/bin"))))
+ (use-package haskell-mode
+   :config
+   (setq exec-path (append exec-path '("~/.local/bin"))))
 
-(use-package intero)
+; (use-package intero)
 
 ; (use-package auctex)
 ; (use-package company-auctex)
@@ -67,6 +68,13 @@
   (setq evil-magit-state 'normal)
   ; optional: disable additional bindings for yanking text
   (setq evil-magit-use-y-for-yank nil))
+
+(use-package lsp-mode)
+(use-package lsp-ui)
+(use-package lsp-haskell
+  :init
+  (add-hook 'haskell-mode-hook #'lsp)
+  (add-hook 'haskell-literate-mode-hook #'lsp))
 
 ; (use-package dante
 ;   :after haskell-mode
@@ -136,7 +144,7 @@
 (setq indent-tabs-mode nil)
 
 ;; Maximize frame
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; Autofill
 (setq current-fill-column 80)
@@ -226,7 +234,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (which-key dante lsp-haskell helm use-package smooth-scrolling linum-relative intero evil-surround evil-magit evil-leader company-auctex))))
+    (lsp-mode which-key dante lsp-haskell helm use-package smooth-scrolling linum-relative intero evil-surround evil-magit evil-leader company-auctex))))
 
 ;; Font Ligatures
 (defun my-correct-symbol-bounds (pretty-alist)
@@ -257,8 +265,7 @@ codepoints starting from codepoint-start."
                 ">=>" ">>" ">>-" ">>=" ">>>" "<*" "<*>" "<|" "<|>"
                 "<$" "<$>" "<!--" "<-" "<--" "<->" "<+" "<+>" "<="
                 "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<" "<~"
-                "<~~" "</" "</>" "~@" "~-" "~=" "~>" "~~" "~~>" "%%"
-                "x" ":" "+" "+" "*")))
+                "<~~" "</" "</>" "~@" "~-" "~=" "~>" "~~" "~~>" "%%")))
     (my-correct-symbol-bounds (my-ligature-list ligs #Xe100))))
 
 (defun my-set-fira-code-ligatures ()
