@@ -76,6 +76,11 @@
   (add-hook 'haskell-mode-hook #'lsp)
   (add-hook 'haskell-literate-mode-hook #'lsp))
 
+(use-package treemacs)
+(use-package projectile
+  :init
+  (projectile-mode +1))
+
 ; (use-package dante
 ;   :after haskell-mode
 ;   :commands 'dante-mode

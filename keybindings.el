@@ -61,6 +61,12 @@
   "bn" 'switch-to-next-buffer
   "bd" 'kill-buffer
 
+  ; projects (projectile)
+  "pf" 'projectile-find-file
+  "pF" 'projectile-find-file-other-frame
+  "pd" 'projectile-find-dir
+  "pD" 'projectile-find-dir-other-frame
+
   ; windows
   "wh" 'windmove-left
   "wj" 'windmove-down
@@ -96,18 +102,23 @@
   "ra" 'align-regexp
 
   ; xref (goto)
-  "gd" 'xref-find-definitions
-  "gD" 'xref-find-definitions-other-window
-  "gr" 'xref-find-references
+  ; "gd" 'xref-find-definitions
+  ; "gD" 'xref-find-definitions-other-window
+  ; "gr" 'xref-find-references
   )
 
 
 ;; Haskell keybindings
 (evil-leader/set-key-for-mode 'haskell-mode
   "m0" 'haskell-navigate-imports
-  "mt" 'dante-type-at
-  "mi" 'dante-info
-  "me" 'dante-eval-block)
+  "gd" 'lsp-find-definition
+  "gr" 'lsp-find-references
+  "gt" 'lsp-find-type-definition
+  )
+  ; "m0" 'haskell-navigate-imports
+  ; "mt" 'dante-type-at
+  ; "mi" 'dante-info
+  ; "me" 'dante-eval-block)
 
 ;; LaTeX keybindings
 (evil-leader/set-key-for-mode 'latex-mode
