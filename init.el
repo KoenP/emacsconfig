@@ -68,16 +68,16 @@
   ; optional: disable additional bindings for yanking text
   (setq evil-magit-use-y-for-yank nil))
 
-(use-package dante
-  :after haskell-mode
-  :commands 'dante-mode
-  :init
-  (add-hook 'haskell-mode-hook 'flycheck-mode)
-  (add-hook 'haskell-mode-hook 'dante-mode)
-  :config
-  (setq flymake-no-changes-timeout nil)
-  (setq flymake-start-syntax-check-on-newline nil)
-  (setq flycheck-check-syntax-automatically '(save mode-enabled)))
+; (use-package dante
+;   :after haskell-mode
+;   :commands 'dante-mode
+;   :init
+;   (add-hook 'haskell-mode-hook 'flycheck-mode)
+;   (add-hook 'haskell-mode-hook 'dante-mode)
+;   :config
+;   (setq flymake-no-changes-timeout nil)
+;   (setq flymake-start-syntax-check-on-newline nil)
+;   (setq flycheck-check-syntax-automatically '(save mode-enabled)))
 
 
 ;(use-package lsp-haskell
@@ -122,7 +122,7 @@
 (smooth-scrolling-mode 1)
 
 ;; Inconsolata font
-(set-face-attribute 'default nil :family "Inconsolata" :height 130)
+(set-face-attribute 'default nil :family "Fira Code" :height 120)
 
 ;; adwaita theme
 (load-theme 'adwaita t)
@@ -227,3 +227,44 @@
  '(package-selected-packages
    (quote
     (which-key dante lsp-haskell helm use-package smooth-scrolling linum-relative intero evil-surround evil-magit evil-leader company-auctex))))
+
+;; Font Ligatures
+(defun my-correct-symbol-bounds (pretty-alist)
+    "Prepend a TAB character to each symbol in this alist,
+this way compose-region called by prettify-symbols-mode
+will use the correct width of the symbols
+instead of the width measured by char-width."
+    (mapcar (lambda (el)
+            (setcdr el (string ?\t (cdr el)))
+            el)
+            pretty-alist))
+
+(defun my-ligature-list (ligatures codepoint-start)
+    "Create an alist of strings to replace with
+codepoints starting from codepoint-start."
+    (let ((codepoints (-iterate '1+ codepoint-start (length ligatures))))
+    (-zip-pair ligatures codepoints)))
+
+(setq my-fira-code-ligatures
+    (let* ((ligs '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\"
+                "{-" "[]" "::" ":::" ":=" "!!" "!=" "!==" "-}"
+                "--" "---" "-->" "->" "->>" "-<" "-<<" "-~"
+                "#{" "#[" "##" "###" "####" "#(" "#?" "#_" "#_("
+                ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*"
+                "/**" "/=" "/==" "/>" "//" "///" "&&" "||" "||="
+                "|=" "|>" "^=" "$>" "++" "+++" "+>" "=:=" "=="
+                "===" "==>" "=>" "=>>" "<=" "=<<" "=/=" ">-" ">="
+                ">=>" ">>" ">>-" ">>=" ">>>" "<*" "<*>" "<|" "<|>"
+                "<$" "<$>" "<!--" "<-" "<--" "<->" "<+" "<+>" "<="
+                "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<" "<~"
+                "<~~" "</" "</>" "~@" "~-" "~=" "~>" "~~" "~~>" "%%"
+                "x" ":" "+" "+" "*")))
+    (my-correct-symbol-bounds (my-ligature-list ligs #Xe100))))
+
+(defun my-set-fira-code-ligatures ()
+    "Add fira code ligatures for use with prettify-symbols-mode."
+    (setq prettify-symbols-alist
+        (append my-fira-code-ligatures prettify-symbols-alist))
+    (prettify-symbols-mode))
+
+(add-hook 'prog-mode-hook 'my-set-fira-code-ligatures)
