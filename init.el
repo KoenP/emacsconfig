@@ -12,17 +12,21 @@
 ;(let ((default-directory  "~/.emacs.d/lisp/"))
 ;  (normal-top-level-add-subdirs-to-load-path))
 
+(setenv "PATH" (concat (getenv "PATH") ":/home/koen/.cabal/bin"))
 
 (require 'package)
 (package-initialize)
- (add-to-list
-  'package-archives
-  '("melpa" . "http://melpa.org/packages/") t)
-(package-refresh-contents)
 
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+; uncomment to install new packages/upgrade packages
+; (add-to-list
+;   'package-archives
+;   '("melpa" . "http://melpa.org/packages/") t)
+; (package-refresh-contents)
+; 
+; (unless (package-installed-p 'use-package)
+;   (package-refresh-contents)
+;   (package-install 'use-package))
+
 (setq use-package-ensure-all t)
 (require 'use-package)
 (require 'use-package-ensure)
@@ -81,6 +85,8 @@
   :init
   (projectile-mode +1))
 
+(use-package proof-general)
+
 ; (use-package dante
 ;   :after haskell-mode
 ;   :commands 'dante-mode
@@ -108,6 +114,9 @@
 (tool-bar-mode -1)
 (blink-cursor-mode 0)
 (column-number-mode t)
+(setq-default message-log-max nil)
+(kill-buffer "*Messages*")
+(setq-default indent-tabs-mode nil)
 
 ;; Word wrapping
 (global-visual-line-mode t)
@@ -135,10 +144,10 @@
 (smooth-scrolling-mode 1)
 
 ;; Inconsolata font
-(set-face-attribute 'default nil :family "Fira Code" :height 120)
+(set-face-attribute 'default nil :family "Fira Code" :height 100)
 
-;; adwaita theme
-(load-theme 'adwaita t)
+;; dark theme
+(load-theme 'spacemacs-dark t)
 
 ;; Recent files
 (require 'recentf)
@@ -237,9 +246,18 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(agda-input-tweak-all
+   (quote
+    (agda-input-compose
+     (agda-input-prepend ";")
+     (agda-input-nonempty))))
+ '(custom-safe-themes
+   (quote
+    ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(package-selected-packages
    (quote
-    (lsp-mode which-key dante lsp-haskell helm use-package smooth-scrolling linum-relative intero evil-surround evil-magit evil-leader company-auctex))))
+    (spacemacs-theme lsp-mode which-key dante lsp-haskell helm use-package smooth-scrolling linum-relative intero evil-surround evil-magit evil-leader company-auctex)))
+ '(proof-electric-terminator-enable t))
 
 ;; Font Ligatures
 (defun my-correct-symbol-bounds (pretty-alist)
@@ -280,3 +298,6 @@ codepoints starting from codepoint-start."
     (prettify-symbols-mode))
 
 (add-hook 'prog-mode-hook 'my-set-fira-code-ligatures)
+
+(load-file (let ((coding-system-for-read 'utf-8))
+	     "/home/koen/.cabal/store/ghc-8.10.2/Agda-2.6.1.2-ea5ca8a9746919d71dccce20e111cab5b1fa808e2a35448863d0b19b8ff3ea01/share/emacs-mode/agda2.el"))

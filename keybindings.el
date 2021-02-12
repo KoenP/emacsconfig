@@ -14,6 +14,7 @@
 ;; Left shift
 (define-key evil-visual-state-map "<" 'evil-shift-left)
 
+(global-set-key (kbd "<escape>") 'keyboard-quit)
 
 ;; Interactive function definitions
 (defun find-init-file ()
@@ -46,6 +47,7 @@
   "hk" 'describe-key
   "hp" 'info-display-manual
   "hf" 'describe-function
+  "hc" 'describe-char
 
   ; files
   "fr" 'recentf-open-files
@@ -101,24 +103,35 @@
   "ri" 'indent-region
   "ra" 'align-regexp
 
+  ; Language Server Protocol (LSP) keybindings
+  "gd" 'lsp-find-definition
+  "gr" 'lsp-find-references
+  "gt" 'lsp-find-type-definition
+
   ; xref (goto)
   ; "gd" 'xref-find-definitions
   ; "gD" 'xref-find-definitions-other-window
   ; "gr" 'xref-find-references
   )
 
-
 ;; Haskell keybindings
 (evil-leader/set-key-for-mode 'haskell-mode
-  "m0" 'haskell-navigate-imports
-  "gd" 'lsp-find-definition
-  "gr" 'lsp-find-references
-  "gt" 'lsp-find-type-definition
-  )
-  ; "m0" 'haskell-navigate-imports
+  "g0" 'haskell-navigate-imports)
   ; "mt" 'dante-type-at
   ; "mi" 'dante-info
   ; "me" 'dante-eval-block)
+
+;; Agda keybindings
+(evil-leader/set-key-for-mode 'agda2-mode
+  "ml" 'agda2-load
+  "mc" 'agda2-make-case
+  "ma" 'agda2-auto-maybe-all
+  "mr" 'agda2-refine
+  "m," 'agda2-goal-and-context
+  "mn" 'agda2-next-goal
+  "mp" 'agda2-previous-goal
+  "mg" 'agda2-give
+  )
 
 ;; LaTeX keybindings
 (evil-leader/set-key-for-mode 'latex-mode
@@ -160,3 +173,6 @@
   (define-key company-active-map (kbd "C-SPC") 'company-complete-selection)
   (define-key company-active-map (kbd "C-j") 'evil-complete-next)
   (define-key company-active-map (kbd "C-k") 'evil-complete-previous))
+
+
+
