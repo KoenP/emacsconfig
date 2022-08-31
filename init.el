@@ -12,20 +12,21 @@
 ;(let ((default-directory  "~/.emacs.d/lisp/"))
 ;  (normal-top-level-add-subdirs-to-load-path))
 
-(setenv "PATH" (concat (getenv "PATH") ":/home/koen/.cabal/bin"))
+; (setenv "PATH" (concat (getenv "PATH") ":/home/koen/.cabal/bin"))
+(add-to-list 'exec-path ":/home/koen/.cabal/bin")
 
 (require 'package)
 (package-initialize)
 
 ; uncomment to install new packages/upgrade packages
-; (add-to-list
-;   'package-archives
-;   '("melpa" . "http://melpa.org/packages/") t)
-; (package-refresh-contents)
-; 
-; (unless (package-installed-p 'use-package)
-;   (package-refresh-contents)
-;   (package-install 'use-package))
+;(add-to-list
+;  'package-archives
+;  '("melpa" . "http://melpa.org/packages/") t)
+;(package-refresh-contents)
+;
+;(unless (package-installed-p 'use-package)
+;  (package-refresh-contents)
+;  (package-install 'use-package))
 
 (setq use-package-ensure-all t)
 (require 'use-package)
@@ -86,6 +87,10 @@
   (projectile-mode +1))
 
 (use-package proof-general)
+(use-package anaconda-mode)
+(use-package idris-mode
+  :init
+  (setq idris-interpreter-path "~/.cabal/bin/idris"))
 
 ; (use-package dante
 ;   :after haskell-mode
@@ -143,8 +148,8 @@
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 (smooth-scrolling-mode 1)
 
-;; Inconsolata font
-(set-face-attribute 'default nil :family "Fira Code" :height 100)
+;; font
+(set-face-attribute 'default nil :family "Fira Code" :height 120)
 
 ;; dark theme
 (load-theme 'spacemacs-dark t)
@@ -172,6 +177,9 @@
 
 ;; When selecting a file in Dired, re-use the Dired buffer to display the file.
 (put 'dired-find-alternate-file 'disabled nil)
+
+;; .pl is prolog, not perl
+(add-to-list 'auto-mode-alist '("\\.\\(pl\\|pro\\|lgt\\)" . prolog-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PACKAGES
@@ -215,6 +223,10 @@
           (set-visited-file-name new-name)
           (set-buffer-modified-p nil))))))
 
+
+;; Anaconda mode
+(add-hook 'python-mode-hook 'anaconda-mode)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LOAD KEYBINDINGS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -256,48 +268,48 @@
     ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(package-selected-packages
    (quote
-    (spacemacs-theme lsp-mode which-key dante lsp-haskell helm use-package smooth-scrolling linum-relative intero evil-surround evil-magit evil-leader company-auctex)))
+    (idris-mode spacemacs-theme lsp-mode which-key dante lsp-haskell helm use-package smooth-scrolling linum-relative intero evil-surround evil-magit evil-leader company-auctex)))
  '(proof-electric-terminator-enable t))
 
 ;; Font Ligatures
-(defun my-correct-symbol-bounds (pretty-alist)
-    "Prepend a TAB character to each symbol in this alist,
-this way compose-region called by prettify-symbols-mode
-will use the correct width of the symbols
-instead of the width measured by char-width."
-    (mapcar (lambda (el)
-            (setcdr el (string ?\t (cdr el)))
-            el)
-            pretty-alist))
+;(defun my-correct-symbol-bounds (pretty-alist)
+;    "Prepend a TAB character to each symbol in this alist,
+;this way compose-region called by prettify-symbols-mode
+;will use the correct width of the symbols
+;instead of the width measured by char-width."
+;    (mapcar (lambda (el)
+;            (setcdr el (string ?\t (cdr el)))
+;            el)
+;            pretty-alist))
+;
+;(defun my-ligature-list (ligatures codepoint-start)
+;    "Create an alist of strings to replace with
+;codepoints starting from codepoint-start."
+;    (let ((codepoints (-iterate '1+ codepoint-start (length ligatures))))
+;    (-zip-pair ligatures codepoints)))
 
-(defun my-ligature-list (ligatures codepoint-start)
-    "Create an alist of strings to replace with
-codepoints starting from codepoint-start."
-    (let ((codepoints (-iterate '1+ codepoint-start (length ligatures))))
-    (-zip-pair ligatures codepoints)))
+;(setq my-fira-code-ligatures
+;    (let* ((ligs '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\"
+;                "{-" "[]" "::" ":::" ":=" "!!" "!=" "!==" "-}"
+;                "--" "---" "-->" "->" "->>" "-<" "-<<" "-~"
+;                "#{" "#[" "##" "###" "####" "#(" "#?" "#_" "#_("
+;                ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*"
+;                "/**" "/=" "/==" "/>" "//" "///" "&&" "||" "||="
+;                "|=" "|>" "^=" "$>" "++" "+++" "+>" "=:=" "=="
+;                "===" "==>" "=>" "=>>" "<=" "=<<" "=/=" ">-" ">="
+;                ">=>" ">>" ">>-" ">>=" ">>>" "<*" "<*>" "<|" "<|>"
+;                "<$" "<$>" "<!--" "<-" "<--" "<->" "<+" "<+>" "<="
+;                "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<" "<~"
+;                "<~~" "</" "</>" "~@" "~-" "~=" "~>" "~~" "~~>" "%%")))
+;    (my-correct-symbol-bounds (my-ligature-list ligs #Xe100))))
+;
+;(defun my-set-fira-code-ligatures ()
+;    "Add fira code ligatures for use with prettify-symbols-mode."
+;    (setq prettify-symbols-alist
+;        (append my-fira-code-ligatures prettify-symbols-alist))
+;    (prettify-symbols-mode))
 
-(setq my-fira-code-ligatures
-    (let* ((ligs '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\"
-                "{-" "[]" "::" ":::" ":=" "!!" "!=" "!==" "-}"
-                "--" "---" "-->" "->" "->>" "-<" "-<<" "-~"
-                "#{" "#[" "##" "###" "####" "#(" "#?" "#_" "#_("
-                ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*"
-                "/**" "/=" "/==" "/>" "//" "///" "&&" "||" "||="
-                "|=" "|>" "^=" "$>" "++" "+++" "+>" "=:=" "=="
-                "===" "==>" "=>" "=>>" "<=" "=<<" "=/=" ">-" ">="
-                ">=>" ">>" ">>-" ">>=" ">>>" "<*" "<*>" "<|" "<|>"
-                "<$" "<$>" "<!--" "<-" "<--" "<->" "<+" "<+>" "<="
-                "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<" "<~"
-                "<~~" "</" "</>" "~@" "~-" "~=" "~>" "~~" "~~>" "%%")))
-    (my-correct-symbol-bounds (my-ligature-list ligs #Xe100))))
+;(add-hook 'prog-mode-hook 'my-set-fira-code-ligatures)
 
-(defun my-set-fira-code-ligatures ()
-    "Add fira code ligatures for use with prettify-symbols-mode."
-    (setq prettify-symbols-alist
-        (append my-fira-code-ligatures prettify-symbols-alist))
-    (prettify-symbols-mode))
-
-(add-hook 'prog-mode-hook 'my-set-fira-code-ligatures)
-
-(load-file (let ((coding-system-for-read 'utf-8))
-	     "/home/koen/.cabal/store/ghc-8.10.2/Agda-2.6.1.2-ea5ca8a9746919d71dccce20e111cab5b1fa808e2a35448863d0b19b8ff3ea01/share/emacs-mode/agda2.el"))
+;(load-file (let ((coding-system-for-read 'utf-8))
+	     ;"/home/koen/.cabal/store/ghc-8.10.2/Agda-2.6.1.2-ea5ca8a9746919d71dccce20e111cab5b1fa808e2a35448863d0b19b8ff3ea01/share/emacs-mode/agda2.el"))
