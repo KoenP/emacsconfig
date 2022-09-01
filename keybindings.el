@@ -48,6 +48,8 @@
   "hp" 'info-display-manual
   "hf" 'describe-function
   "hc" 'describe-char
+  "hv" 'describe-variable
+  "hm" 'describe-mode
 
   ; files
   "fr" 'recentf-open-files
@@ -56,6 +58,7 @@
   "fk" 'find-keybindings-file
   "fw" 'find-intero-whitelist-file
   "fl" 'load-file
+  "ff" 'helm-find-files
   
   ; buffers
   "bb" 'switch-to-buffer
@@ -64,10 +67,11 @@
   "bd" 'kill-buffer
 
   ; projects (projectile)
-  "pf" 'projectile-find-file
-  "pF" 'projectile-find-file-other-frame
-  "pd" 'projectile-find-dir
-  "pD" 'projectile-find-dir-other-frame
+  "p" 'projectile-command-map
+  ;"pf" 'projectile-find-file
+  ;"pF" 'projectile-find-file-other-frame
+  ;"pd" 'projectile-find-dir
+  ;"pD" 'projectile-find-dir-other-frame
 
   ; windows
   "wh" 'windmove-left
@@ -108,11 +112,22 @@
   "gr" 'lsp-find-references
   "gt" 'lsp-find-type-definition
 
+  ; Install packages
+  "ir" 'refresh-packages
+  "ii" 'package-install
+
   ; xref (goto)
   ; "gd" 'xref-find-definitions
   ; "gD" 'xref-find-definitions-other-window
   ; "gr" 'xref-find-references
   )
+
+;; Emacs lisp keybindings
+(evil-leader/set-key-for-mode 'emacs-lisp-mode
+  "mel" 'eval-last-sexp
+  "mer" 'eval-region
+  "mee" 'eval-expression
+  "meb" 'eval-buffer)
 
 ;; Haskell keybindings
 (evil-leader/set-key-for-mode 'haskell-mode
@@ -134,8 +149,31 @@
   )
 
 ;; LaTeX keybindings
+(defun TeX-bold()
+  (interactive)
+  (TeX-font nil ?\C-b))
+(defun TeX-typewriter()
+  (interactive)
+  (TeX-font nil ?\C-t))
+(defun TeX-emphasis()
+  (interactive)
+  (TeX-font nil ?\C-e))
+(defun TeX-smallcaps()
+  (interactive)
+  (TeX-font nil ?\C-c))
+(defun TeX-font-delete()
+  (interactive)
+  (TeX-font nil ?\C-d))
 (evil-leader/set-key-for-mode 'latex-mode
-  "me" 'tex-latex-block)
+  "me" 'LaTeX-environment
+  "mm" 'TeX-insert-macro
+  "mfb" 'TeX-bold
+  "mfe" 'TeX-emphasis
+  "mfc" 'TeX-smallcaps
+  "mft" 'TeX-typewriter
+  "mfd" 'TeX-font-delete
+  "mcp" 'TeX-comment-or-uncomment-paragraph
+  )
 
 ;; eww keybindings
 (evil-leader/set-key-for-mode 'eww-mode
