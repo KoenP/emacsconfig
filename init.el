@@ -1,4 +1,5 @@
 (require 'package)
+
 (package-initialize)
 
 (defun refresh-packages ()
@@ -69,6 +70,9 @@
 ;; .pl is prolog, not perl
 (add-to-list 'auto-mode-alist '("\\.\\(pl\\|pro\\|lgt\\)" . prolog-mode))
 
+;; Better handling of CamelCase.
+(global-subword-mode t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; COMMON DEPENDENCIES
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -116,6 +120,7 @@
 
 ;; Spacemacs theme.
 (require 'spacemacs-dark-theme)
+(load-theme 'spacemacs-dark t nil)
 
 ;; Relative line numbers.
 (require 'linum-relative)
@@ -138,6 +143,9 @@
 (setq company-minimum-prefix-length 1)
 (setq company-selection-wrap-around t)
 
+;; Snippets.
+(require 'yasnippet)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PROJECT MANAGEMENT
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -151,8 +159,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LANGUAGE SUPPORT
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Language server protocol.
-(require 'lsp-mode)
+;; Incremental parsing support.
+(require 'tree-sitter)
+(global-tree-sitter-mode)
+(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+
+(require 'tree-sitter-langs)
 
 ;; Latex support.
 (load "auctex.el" nil t t)
@@ -168,6 +180,24 @@
 (add-hook 'LaTeX-mode-hook #'LaTeX-math-mode)
 (setq TeX-electric-escape t)
 
+;; Typescript support.
+(require 'typescript-mode)
+(add-hook 'typescript-mode-hook 'lsp)
+
+;; Haskell support.
+(require 'haskell-mode)
+(add-hook 'haskell-mode-hook 'haskell-indent-mode)
+(add-hook 'haskell-mode-hook 'highlight-uses-mode)
+(add-hook 'haskell-mode-hook #'lsp)
+(add-hook 'haskell-literate--mode-hook #'lsp)
+
+
+;; Language server protocol.
+(require 'lsp-mode)
+(setq lsp-idle-delay 0.1)
+(with-eval-after-load 'lsp-mode
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
+  (yas-global-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TODO
@@ -188,10 +218,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
  '(helm-minibuffer-history-key "M-p")
  '(package-selected-packages
-   (quote
-    (magit evil-collection company-auctex which-key auctex undo-tree spacemacs-theme smooth-scrolling linum-relative helm evil-surround evil-leader evil projectile company lsp-mode))))
+   '(haskell-mode tree-sitter-langs tree-sitter typescript-mode magit evil-collection company-auctex which-key auctex undo-tree spacemacs-theme smooth-scrolling linum-relative helm evil-surround evil-leader evil projectile company lsp-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -41,7 +41,7 @@
 (evil-leader/set-leader "<SPC>")
 (evil-leader/set-key
   ; M-x
-  "<SPC>" 'execute-extended-command
+  "<SPC>" 'helm-M-x
 
   ; documentation
   "hk" 'describe-key
@@ -204,11 +204,12 @@
   "od" 'hide-subtree
   )
 
-;; Autocomplete keybindings\
+;; Autocomplete keybindings
 (with-eval-after-load 'company
-  (define-key company-active-map (kbd "<return>") nil)
-  (define-key company-active-map (kbd "RET") nil)
-  (define-key company-active-map (kbd "C-SPC") 'company-complete-selection)
+  (define-key company-active-map (kbd "<return>") 'company-complete-selection)
+  (define-key company-active-map (kbd "S-<return>") 'company-complete-common)
+  ;(define-key company-active-map (kbd "RET") nil)
+  ;(define-key company-active-map (kbd "C-SPC") 'company-complete-selection)
   (define-key company-active-map (kbd "C-j") 'evil-complete-next)
   (define-key company-active-map (kbd "C-k") 'evil-complete-previous))
 
