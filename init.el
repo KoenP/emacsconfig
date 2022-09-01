@@ -146,6 +146,10 @@
 ;; Snippets.
 (require 'yasnippet)
 
+;; Inline error messages.
+(require 'flycheck)
+(global-flycheck-mode)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PROJECT MANAGEMENT
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -186,18 +190,29 @@
 
 ;; Haskell support.
 (require 'haskell-mode)
+(require 'lsp-haskell)
+(require 'flycheck-haskell)
+(setq exec-path (append exec-path '("~/.local/bin")))
 (add-hook 'haskell-mode-hook 'haskell-indent-mode)
 (add-hook 'haskell-mode-hook 'highlight-uses-mode)
 (add-hook 'haskell-mode-hook #'lsp)
 (add-hook 'haskell-literate--mode-hook #'lsp)
+(add-hook 'haskell-mode-hook #'flycheck-haskell-setup)
 
 
 ;; Language server protocol.
 (require 'lsp-mode)
+(require 'lsp-ui)
 (setq lsp-idle-delay 0.1)
 (with-eval-after-load 'lsp-mode
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
-  (yas-global-mode))
+  (yas-global-mode)
+  (lsp-ui-doc-enable t)
+  (setq lsp-ui-doc-show-with-cursor t)
+  (setq lsp-ui-doc-delay 0.1))
+;; TODO
+;; lsp ui peek feature?
+;; lsp ui imenu feature?
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TODO
@@ -222,7 +237,7 @@
    '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
  '(helm-minibuffer-history-key "M-p")
  '(package-selected-packages
-   '(haskell-mode tree-sitter-langs tree-sitter typescript-mode magit evil-collection company-auctex which-key auctex undo-tree spacemacs-theme smooth-scrolling linum-relative helm evil-surround evil-leader evil projectile company lsp-mode)))
+   '(lsp-ui flycheck-haskell flycheck lsp-haskell haskell-mode tree-sitter-langs tree-sitter typescript-mode magit evil-collection company-auctex which-key auctex undo-tree spacemacs-theme smooth-scrolling linum-relative helm evil-surround evil-leader evil projectile company lsp-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

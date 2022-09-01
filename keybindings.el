@@ -83,7 +83,7 @@
   "wd" 'delete-window
   "w/" 'split-window-horizontally
   "w-" 'split-window-vertically
-  "ww" 'other-window
+  "ww" 'delete-other-windows
   "w1" 'delete-other-windows
 
   ;; error navigation
