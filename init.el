@@ -16,10 +16,12 @@
 (tool-bar-mode -1)
 (blink-cursor-mode 0)
 (column-number-mode t)
-(setq-default message-log-max nil)
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
-
+(electric-indent-mode -1)
+(setq-default c-basic-offset 2)
+(setq-default message-log-max nil)
+(kill-buffer "*Messages*")
 
 ;; Word wrapping
 (global-visual-line-mode t)
@@ -51,9 +53,6 @@
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
-
-;; No tabs
-(setq indent-tabs-mode nil)
 
 ;; Maximize frame
 ; (add-to-list 'default-frame-alist '(fullscreen . maximized))
@@ -97,6 +96,7 @@
 (global-evil-surround-mode 1)
 (evil-mode 1)
 (evil-collection-init)
+(setq evil-want-fine-undo t)
 (load-file "~/.emacs.d/keybindings.el")
 
 ;; More sane undo system.
@@ -139,15 +139,22 @@
 ;; Company autocompletion.
 (require 'company)
 (add-hook 'after-init-hook 'global-company-mode)
-(setq company-idle-delay 0)
+(setq company-idle-delay 0.2)
 (setq company-minimum-prefix-length 1)
 (setq company-selection-wrap-around t)
+
+;; Helm interface for company-mode.
+(require 'helm-company)
 
 ;; Snippets.
 (require 'yasnippet)
 
 ;; Inline error messages.
 (require 'flycheck)
+(setq flycheck-check-syntax-automatically '(mode-enabled save))
+(setq flycheck-display-errors-delay 0.0)
+(setq flycheck-idle-change-delay 0.0)
+(setq flycheck-idle-buffer-switch-delay 0.0)
 (global-flycheck-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -182,23 +189,30 @@
           (lambda () (set (make-local-variable 'TeX-electric-math)
                           (cons "$" "$"))))
 (add-hook 'LaTeX-mode-hook #'LaTeX-math-mode)
-(setq TeX-electric-escape t)
+(setq TeX-electric-escape nil)
 
-;; Typescript support.
+;; Typescript support. Requires typescript language server.
 (require 'typescript-mode)
-(add-hook 'typescript-mode-hook 'lsp)
+;(add-hook 'typescript-mode-hook 'lsp)
+(setq typescript-indent-level 2)
 
-;; Haskell support.
+;; Vue 3 support. Requires volar language server.
+;; npm install -g @volar/server
+(require 'vue-mode)
+;(add-hook 'vue-mode-hook #'lsp)
+
+
+;; Haskell support. Requires haskell language server.
 (require 'haskell-mode)
-(require 'lsp-haskell)
-(require 'flycheck-haskell)
+;(require 'lsp-haskell)
+;(require 'flycheck-haskell)
 (setq exec-path (append exec-path '("~/.local/bin")))
+(setq haskell-indent-offset 2)
 (add-hook 'haskell-mode-hook 'haskell-indent-mode)
 (add-hook 'haskell-mode-hook 'highlight-uses-mode)
 (add-hook 'haskell-mode-hook #'lsp)
 (add-hook 'haskell-literate--mode-hook #'lsp)
 (add-hook 'haskell-mode-hook #'flycheck-haskell-setup)
-
 
 ;; Language server protocol.
 (require 'lsp-mode)
@@ -213,6 +227,9 @@
 ;; TODO
 ;; lsp ui peek feature?
 ;; lsp ui imenu feature?
+
+;; Alternative client for language server protocol.
+(require 'eglot)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TODO
@@ -237,7 +254,7 @@
    '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
  '(helm-minibuffer-history-key "M-p")
  '(package-selected-packages
-   '(lsp-ui flycheck-haskell flycheck lsp-haskell haskell-mode tree-sitter-langs tree-sitter typescript-mode magit evil-collection company-auctex which-key auctex undo-tree spacemacs-theme smooth-scrolling linum-relative helm evil-surround evil-leader evil projectile company lsp-mode)))
+   '(eglot helm-company vue-mode lsp-ui flycheck-haskell flycheck lsp-haskell haskell-mode tree-sitter-langs tree-sitter typescript-mode magit evil-collection company-auctex which-key auctex undo-tree spacemacs-theme smooth-scrolling linum-relative helm evil-surround evil-leader evil projectile company lsp-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

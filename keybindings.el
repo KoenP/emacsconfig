@@ -206,6 +206,7 @@
 
 ;; Autocomplete keybindings
 (with-eval-after-load 'company
+  (define-key company-active-map (kbd "C-SPC") 'helm-company)
   (define-key company-active-map (kbd "<return>") 'company-complete-selection)
   (define-key company-active-map (kbd "S-<return>") 'company-complete-common)
   ;(define-key company-active-map (kbd "RET") nil)
