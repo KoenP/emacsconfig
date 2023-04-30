@@ -50,6 +50,7 @@
   "hc" 'describe-char
   "hv" 'describe-variable
   "hm" 'describe-mode
+  "d." 'lsp-ui-doc-show
 
   ; files
   "fr" 'recentf-open-files

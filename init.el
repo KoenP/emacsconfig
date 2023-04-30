@@ -18,7 +18,7 @@
 (column-number-mode t)
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
-(electric-indent-mode -1)
+(electric-indent-mode t)
 (setq-default c-basic-offset 2)
 (setq-default message-log-max nil)
 (kill-buffer "*Messages*")
@@ -69,8 +69,8 @@
 ;; .pl is prolog, not perl
 (add-to-list 'auto-mode-alist '("\\.\\(pl\\|pro\\|lgt\\)" . prolog-mode))
 
-;; Better handling of CamelCase.
-(global-subword-mode t)
+;; Treat CamelCase words as multiple words.
+;(global-subword-mode t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; COMMON DEPENDENCIES
@@ -118,9 +118,10 @@
 (require 'smooth-scrolling)
 (smooth-scrolling-mode 1)
 
-;; Spacemacs theme.
-(require 'spacemacs-dark-theme)
-(load-theme 'spacemacs-dark t nil)
+;; Theme.
+;(require 'spacemacs-dark-theme)
+;(load-theme 'spacemacs-dark t nil)
+(load-theme 'leuven t)
 
 ;; Relative line numbers.
 (require 'linum-relative)
@@ -191,10 +192,6 @@
 (add-hook 'LaTeX-mode-hook #'LaTeX-math-mode)
 (setq TeX-electric-escape nil)
 
-;; Typescript support. Requires typescript language server.
-(require 'typescript-mode)
-;(add-hook 'typescript-mode-hook 'lsp)
-(setq typescript-indent-level 2)
 
 ;; Vue 3 support. Requires volar language server.
 ;; npm install -g @volar/server
@@ -214,22 +211,46 @@
 (add-hook 'haskell-literate--mode-hook #'lsp)
 (add-hook 'haskell-mode-hook #'flycheck-haskell-setup)
 
+;; C/C++ support.
+(add-hook 'c-mode-hook 'lsp)
+(add-hook 'c++-mode-hook 'lsp)
+
+;; Web development support (javascript/typescript/html/css).
+(require 'web-mode)
+(setq web-mode-markup-indent-offset 2)
+(setq web-mode-css-indent-offset 2)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(require 'typescript-mode)
+(add-hook 'typescript-mode-hook 'lsp)
+(setq typescript-indent-level 2)
+
 ;; Language server protocol.
 (require 'lsp-mode)
 (require 'lsp-ui)
 (setq lsp-idle-delay 0.1)
+(setq lsp-lens-enable nil) ; turn off massive import list suggestions, mostly for Haskell
 (with-eval-after-load 'lsp-mode
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
   (yas-global-mode)
   (lsp-ui-doc-enable t)
   (setq lsp-ui-doc-show-with-cursor t)
-  (setq lsp-ui-doc-delay 0.1))
+  (setq lsp-ui-doc-position 'bottom))
+  ;(setq lsp-ui-doc-delay 0.1)
+  ;(setq lsp-ui-doc-position 'at-point))
 ;; TODO
 ;; lsp ui peek feature?
 ;; lsp ui imenu feature?
 
+
 ;; Alternative client for language server protocol.
-(require 'eglot)
+; (require 'eglot)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TODO
@@ -254,7 +275,7 @@
    '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
  '(helm-minibuffer-history-key "M-p")
  '(package-selected-packages
-   '(eglot helm-company vue-mode lsp-ui flycheck-haskell flycheck lsp-haskell haskell-mode tree-sitter-langs tree-sitter typescript-mode magit evil-collection company-auctex which-key auctex undo-tree spacemacs-theme smooth-scrolling linum-relative helm evil-surround evil-leader evil projectile company lsp-mode)))
+   '(web-mode projectile-ripgrep ripgrep eglot helm-company vue-mode lsp-ui flycheck-haskell flycheck lsp-haskell haskell-mode tree-sitter-langs tree-sitter typescript-mode magit evil-collection company-auctex which-key auctex undo-tree spacemacs-theme smooth-scrolling linum-relative helm evil-surround evil-leader evil projectile company lsp-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
