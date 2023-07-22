@@ -273,9 +273,10 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
+ '(elm-indent-offset 2)
  '(helm-minibuffer-history-key "M-p")
  '(package-selected-packages
-   '(web-mode projectile-ripgrep ripgrep eglot helm-company vue-mode lsp-ui flycheck-haskell flycheck lsp-haskell haskell-mode tree-sitter-langs tree-sitter typescript-mode magit evil-collection company-auctex which-key auctex undo-tree spacemacs-theme smooth-scrolling linum-relative helm evil-surround evil-leader evil projectile company lsp-mode)))
+   '(elm-mode web-mode projectile-ripgrep ripgrep eglot helm-company vue-mode lsp-ui flycheck-haskell flycheck lsp-haskell haskell-mode tree-sitter-langs tree-sitter typescript-mode magit evil-collection company-auctex which-key auctex undo-tree spacemacs-theme smooth-scrolling linum-relative helm evil-surround evil-leader evil projectile company lsp-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
