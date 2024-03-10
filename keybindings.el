@@ -149,6 +149,10 @@
   "mg" 'agda2-give
   )
 
+;; web-mode keybindings
+(evil-leader/set-key-for-mode 'web-mode
+  "mm" 'web-mode-tag-match)
+
 ;; LaTeX keybindings
 (defun TeX-bold()
   (interactive)

@@ -14,6 +14,7 @@
 (setq ring-bell-function 'ignore)
 (setq inhibit-startup-screen t)
 (tool-bar-mode -1)
+(menu-bar-mode -1)
 (blink-cursor-mode 0)
 (column-number-mode t)
 (setq-default indent-tabs-mode nil)
@@ -72,6 +73,10 @@
 ;; Treat CamelCase words as multiple words.
 ;(global-subword-mode t)
 
+;; Insert current date command.
+(defun insert-current-date () (interactive)
+       (insert (shell-command-to-string "echo -n $(date +%Y-%m-%d)")))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; COMMON DEPENDENCIES
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -119,8 +124,8 @@
 (smooth-scrolling-mode 1)
 
 ;; Theme.
-;(require 'spacemacs-dark-theme)
-;(load-theme 'spacemacs-dark t nil)
+; (require 'spacemacs-dark-theme)
+; (load-theme 'spacemacs-dark t nil)
 (load-theme 'leuven t)
 
 ;; Relative line numbers.
@@ -178,6 +183,19 @@
 
 (require 'tree-sitter-langs)
 
+;; Org mode config.
+(setq org-image-actual-width '(400))
+  ; Look for "#+attr_html: :width ...px" annotation, otherwise use default of 400px.
+  ; See https://orgmode.org/manual/Images.html
+(setq org-link-frame-setup
+      '((vm . vm-visit-folder-other-frame)
+        (vm-imap . vm-visit-imap-folder-other-frame)
+        (gnus . org-gnus-no-new-news)
+        (file . find-file)
+        (wl . wl-other-frame)))
+(setq org-startup-with-inline-images nil)
+(setq org-return-follows-link t)
+
 ;; Latex support.
 (load "auctex.el" nil t t)
 (load "preview.el" nil t t)
@@ -219,6 +237,8 @@
 (require 'web-mode)
 (setq web-mode-markup-indent-offset 2)
 (setq web-mode-css-indent-offset 2)
+(setq web-mode-enable-current-element-highlight t)
+(setq web-mode-auto-close-style 2)
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
